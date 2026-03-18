@@ -1,88 +1,789 @@
 <!DOCTYPE html>
-<html lang="en">
-    <head>
-        <meta charset="UTF-8" />
-        <link rel="stylesheet" href="./static/css/styles.css" />
-        <meta
-            http-equiv="Content-Security-Policy"
-            content="default-src * 'unsafe-inline' 'unsafe-eval'"
-        />
-        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-        <title>Tauri App</title>
-        <script src="./static/js/main.js"></script>
-    </head>
-    <body>
-        <main class="container">
-            <h1>Welcome to TauriMan</h1>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>手机台账系统</title>
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+      font-family: system-ui, -apple, sans-serif;
+    }
+    :root {
+      --primary: #007AFF;
+      --bg: #F2F2F2;
+      --card: #FFFFFF;
+      --text: #1D1111;
+      --text2: #888;
+      --red: #ff3b30;
+      --green: #34c750;
+      --paid: #34c750;
+      --unpaid: #FF9500;
+    }
+    body {
+      background: var(--bg);
+      color: var(--text);
+      font-size: 15px;
+      padding-bottom: 90px;
+    }
+    .header {
+      background: #fff;
+      padding: 12px 16px;
+      position: sticky;
+      top: 0;
+      z-index: 10;
+      border-bottom: 1px solid #eee;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+    .search-bar {
+      height: 36px;
+      background: #f5f8f9;
+      border-radius: 18px;
+      padding: 0 12px;
+      display: flex;
+      align-items: center;
+      flex: 1;
+    }
+    #searchInput {
+      border: none;
+      background: transparent;
+      outline: none;
+      width: 100%;
+      font-size: 14px;
+    }
+    .add-btn {
+      width: 36px;
+      height: 36px;
+      border-radius: 50%;
+      background: var(--primary);
+      color: #fff;
+      font-size: 20px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      flex-shrink: 0;
+      border: none;
+    }
+    .filter-bar {
+      background: #fff;
+      padding: 8px 12px;
+      display: flex;
+      gap: 8px;
+      overflow-x: auto;
+      border-bottom: 1px solid #eee;
+    }
+    .filter-bar select {
+      padding: 6px 8px;
+      border: 1px solid #ddd;
+      border-radius: 6px;
+      font-size: 13px;
+      background: #fff;
+      min-width:100px;
+    }
+    .time-tabs {
+      background: #fff;
+      padding: 10px 16px;
+      display: flex;
+      gap: 8px;
+      border-bottom: 1px solid #eee;
+    }
+    .time-tab {
+      padding: 6px 12px;
+      border-radius: 16px;
+      background: #f5f7F9;
+      white-space: nowrap;
+      cursor: pointer;
+      font-size: 14px;
+    }
+    .time-tab.active {
+      background: var(--primary);
+      color: #fff;
+    }
+    .summary-row {
+      background: #fff;
+      padding: 16px;
+      display: grid;
+      grid-template-columns: repeat(5, 1fr);
+      gap: 8px;
+      text-align: center;
+      border-bottom: 1px solid #eee;
+    }
+    .summary-item .label {
+      font-size: 12px;
+      color: var(--text2);
+      margin-bottom: 4px;
+    }
+    .summary-item .value {
+      font-size: 16px;
+      font-weight: 600;
+    }
+    .text-red { color: var(--red) !important; }
+    .text-green { color: var(--green) !important; }
+    .text-blue { color: var(--primary) !important; }
 
-            <div class="row">
-                <a
-                    href="https://tauri.app"
-                    target="_blank"
-                    rel="noopener noreferrer"
-                >
-                    <img
-                        src="./assets/tauri.svg"
-                        class="logo tauri"
-                        alt="Tauri logo"
-                    />
-                </a>
-                <a
-                    href="https://pakeplus.com/"
-                    target="_blank"
-                    rel="noopener noreferrer"
-                >
-                    <img
-                        src="https://hk.gh-proxy.org/https://github.com/Sjj1024/PakePlus/blob/main/app-icon.png"
-                        class="logo vanilla"
-                        alt="JavaScript logo"
-                    />
-                </a>
-            </div>
-            <p>Click to get data</p>
-            <form class="row" id="greet-form">
-                <input id="greet-input" placeholder="Enter a name..." />
-                <button type="submit" id="getdata">GET DATA</button>
-            </form>
-            <div class="functions">
-                <a href="./book.html" target="_self">跳转到book.html</a>
-                <a
-                    href="https://www.baidu.com"
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    >跳到百度blank
-                </a>
-                <a
-                    href="https://www.baidu.com"
-                    target="_self"
-                    rel="noopener noreferrer"
-                >
-                    跳到百度self
-                </a>
-                <button onclick="sayHello()">点击我</button>
-                <button onclick="sayHello()">下载文件</button>
-                <button onclick="sayHello()">上传文件</button>
-                <button onclick="sayHello()">访问相机</button>
-                <button onclick="sayHello()">访问麦克风</button>
-                <button onclick="sayHello()">访问相册</button>
-                <button class="btn" onclick="openWechat()">打开微信</button>
-                <button class="btn" onclick="openWechatScan()">
-                    打开扫一扫
-                </button>
-                <button class="btn" onclick="openZhihu()">打开知乎</button>
-                <button onclick="sayHello()">打开抖音</button>
-                <button onclick="sayHello()">用浏览器打开</button>
-                <button>打开知乎</button>
-            </div>
-            <p id="greet-msg"></p>
-            <img src="./static/image/cursor.jpeg" alt="logo" />
-            <video
-                src="https://hk.gh-proxy.org/https://github.com/Sjj1024/PakePlus/blob/main/docs/static/videos/pakeplus.mp4"
-                autoplay
-                controls
-                style="width: 100%; height: 100%"
-            ></video>
-            <audio src="./static/music/yin.mp3" controls></audio>
-        </main>
-    </body>
+    .record-list { margin-top: 8px; padding: 0 12px; }
+    .record-item {
+      background: #fff;
+      margin-bottom: 8px;
+      padding: 12px 16px;
+      border-radius: 10px;
+      box-shadow: 0 1px 2px rgba(0,0,0,0.05);
+    }
+    .record-head {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 8px;
+    }
+    .status-tag {
+      padding: 2px 8px;
+      border-radius: 4px;
+      font-size: 12px;
+      color: #fff;
+    }
+    .status-tag.paid { background: var(--paid); }
+    .status-tag.unpaid { background: var(--unpaid); }
+    .record-title { font-size: 16px; font-weight: 500; margin: 6px 0; }
+    .record-note {
+      background: #f8f8f8;
+      padding: 6px 8px;
+      border-radius: 6px;
+      margin: 6px 0;
+      font-size: 13px;
+    }
+    .record-row {
+      display: flex;
+      justify-content: space-between;
+      margin: 6px 0;
+      font-size: 14px;
+    }
+    .record-actions {
+      display: flex;
+      gap: 12px;
+      margin-top: 8px;
+    }
+    .record-action {
+      background: none;
+      border: none;
+      color: var(--primary);
+      font-size: 14px;
+      cursor: pointer;
+    }
+    .empty-tip {
+      text-align: center;
+      padding: 40px 20px;
+      color: #999;
+    }
+    .modal {
+      position: fixed;
+      top: 0; left: 0; right: 0; bottom: 0;
+      background: rgba(0,0,0,0.5);
+      display: none;
+      align-items: center;
+      justify-content: center;
+      z-index: 100;
+    }
+    .modal-content {
+      background: #fff;
+      width: 90%;
+      max-width: 400px;
+      padding: 20px;
+      border-radius: 12px;
+      max-height: 90vh;
+      overflow-y: auto;
+    }
+    .form-row {
+      display: flex;
+      gap: 10px;
+      margin-bottom: 10px;
+    }
+    .form-col { flex:1; }
+    .form-col label {
+      display: block;
+      margin-bottom: 4px;
+      font-size: 13px;
+      color: var(--text2);
+    }
+    input, select, textarea {
+      width: 100%;
+      padding: 8px;
+      border: 1px solid #ddd;
+      border-radius: 6px;
+      font-size: 14px;
+    }
+    .price-panel {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 10px;
+      text-align: center;
+      background: #f8f8f8;
+      padding: 10px;
+      border-radius: 8px;
+      margin: 10px 0;
+    }
+    .btn-row {
+      display: flex;
+      gap: 10px;
+      margin-top: 10px;
+    }
+    .btn-submit {
+      flex:1;
+      background: var(--primary);
+      color: #fff;
+      border: none;
+      padding: 12px;
+      border-radius: 8px;
+    }
+    .btn-cancel {
+      flex:1;
+      background: #eee;
+      border: none;
+      padding: 12px;
+      border-radius: 8px;
+    }
+    .model-manage {
+      margin-bottom:12px;
+      display:flex;
+      gap:8px;
+      align-items:center;
+    }
+    .model-manage input {
+      flex:1;
+    }
+    .model-manage button {
+      padding: 8px 10px;
+      border: none;
+      border-radius: 6px;
+      color: #fff;
+      font-size:12px;
+    }
+    .btn-add-model { background: var(--primary); }
+    .btn-del-model { background: var(--red); }
+    .bottom-bar {
+      position: fixed;
+      bottom: 0; left:0; right:0;
+      background: #fff;
+      border-top:1px solid #eee;
+      display:flex;
+      padding:8px 12px;
+      gap:8px;
+      z-index:98;
+    }
+    .bottom-bar button {
+      flex:1;
+      padding:10px;
+      border:none;
+      border-radius:8px;
+      background:var(--primary);
+      color:#fff;
+    }
+  </style>
+</head>
+<body>
+
+<div class="header">
+  <div class="search-bar">
+    <span>🔍</span>
+    <input id="searchInput" placeholder="搜索型号/IMEI/备注" oninput="renderAll()">
+  </div>
+  <button class="add-btn" onclick="openAddModal()">+</button>
+</div>
+
+<div class="filter-bar">
+  <select id="filterStatus" onchange="renderAll()">
+    <option value="">全部状态</option>
+    <option value="0">未出货</option>
+    <option value="1">已出货</option>
+  </select>
+  <select id="filterModel" onchange="renderAll()"></select>
+  <select id="filterRam" onchange="renderAll()"></select>
+  <select id="filterRom" onchange="renderAll()"></select>
+  <select id="filterChannel" onchange="renderAll()"></select>
+</div>
+
+<div class="time-tabs">
+  <div class="time-tab" onclick="switchTime('lastMonth')">上月</div>
+  <div class="time-tab" onclick="switchTime('lastYear')">上一年</div>
+  <div class="time-tab" onclick="switchTime('month')">本月</div>
+  <div class="time-tab" onclick="switchTime('year')">本年</div>
+  <div class="time-tab active" onclick="switchTime('all')">全部</div>
+</div>
+
+<div class="summary-row">
+  <div class="summary-item">
+    <div class="label">台数</div>
+    <div class="value text-blue" id="summaryCount">0</div>
+  </div>
+  <div class="summary-item">
+    <div class="label">总成本</div>
+    <div class="value" id="summaryCost">0.00</div>
+  </div>
+  <div class="summary-item">
+    <div class="label">总收入</div>
+    <div class="value" id="summaryIncome">0.00</div>
+  </div>
+  <div class="summary-item">
+    <div class="label">总毛利</div>
+    <div class="value" id="summaryProfit">0.00</div>
+  </div>
+  <div class="summary-item">
+    <div class="label">总毛利率</div>
+    <div class="value" id="summaryProfitRate">0.00%</div>
+  </div>
+</div>
+
+<div class="record-list" id="recordList"></div>
+
+<div class="modal" id="addModal">
+  <div class="modal-content">
+    <h3 style="text-align:center; margin-bottom:12px">添加/编辑记录</h3>
+
+    <div class="model-manage">
+      <input type="text" id="newModel" placeholder="型号" style="flex:1; padding:8px; border-radius:6px; border:1px solid #ddd;">
+      <button class="btn-add-model" onclick="addNewModel()">添加型号</button>
+      <button class="btn-del-model" onclick="deleteModel()">删除型号</button>
+    </div>
+
+    <div class="form-row">
+      <div class="form-col">
+        <label>型号</label>
+        <select id="model" onchange="syncModelToInput()"></select>
+      </div>
+      <div class="form-col">
+        <label>IMEI</label>
+        <input id="imei">
+      </div>
+    </div>
+
+    <div class="form-row">
+      <div class="form-col">
+        <label>运行内存</label>
+        <select id="ram">
+          <option value="">请选择</option>
+          <option value="4GB">4GB</option>
+          <option value="6GB">6GB</option>
+          <option value="8GB">8GB</option>
+          <option value="12GB">12GB</option>
+          <option value="16GB">16GB</option>
+        </select>
+      </div>
+      <div class="form-col">
+        <label>存储内存</label>
+        <select id="rom">
+          <option value="">请选择</option>
+          <option value="64GB">64GB</option>
+          <option value="128GB">128GB</option>
+          <option value="256GB">256GB</option>
+          <option value="512GB">512GB</option>
+          <option value="1TB">1TB</option>
+        </select>
+      </div>
+    </div>
+
+    <div class="form-row">
+      <div class="form-col">
+        <label>收货日期</label>
+        <input id="costTime" type="date">
+      </div>
+      <div class="form-col">
+        <label>收货价</label>
+        <input id="costPrice" type="number" oninput="autoCalc()">
+      </div>
+    </div>
+
+    <div class="form-row">
+      <div class="form-col">
+        <label>出货状态</label>
+        <select id="sellStatus" oninput="autoCalc()">
+          <option value="0">未出货</option>
+          <option value="1">已出货</option>
+        </select>
+      </div>
+      <div class="form-col">
+        <label>渠道</label>
+        <select id="channel">
+          <option value="">请选择渠道</option>
+          <option value="个人">个人</option>
+          <option value="同行">同行</option>
+          <option value="平台">平台</option>
+          <option value="门店">门店</option>
+          <option value="其他">其他</option>
+        </select>
+      </div>
+    </div>
+
+    <div class="form-row">
+      <div class="form-col">
+        <label>出货价</label>
+        <input id="sellPrice" type="number" oninput="autoCalc()">
+      </div>
+      <div class="form-col">
+        <label>邮费</label>
+        <input id="postage" type="number" value="0" oninput="autoCalc()">
+      </div>
+    </div>
+
+    <div class="form-row">
+      <div class="form-col" style="flex:1">
+        <label>备注</label>
+        <textarea id="note" rows="2"></textarea>
+      </div>
+    </div>
+
+    <div class="price-panel">
+      <div><div>成本</div><div id="showCost">0</div></div>
+      <div><div>收入</div><div id="showSell">0</div></div>
+      <div><div>毛利</div><div id="showProfit">0</div></div>
+      <div><div>毛利率</div><div id="showRate">0%</div></div>
+    </div>
+
+    <div class="btn-row">
+      <button class="btn-submit" onclick="saveRecord()">保存</button>
+      <button class="btn-cancel" onclick="closeModal()">取消</button>
+    </div>
+  </div>
+</div>
+
+<div class="bottom-bar">
+  <button onclick="exportCSV()">导出CSV</button>
+  <button onclick="importBackup()">导入备份</button>
+  <button onclick="exportBackup()">备份数据</button>
+</div>
+
+<input type="file" id="fileInput" accept=".json" style="display:none;">
+
+<script>
+const RECORD_KEY = "phone_records_full";
+const MODEL_KEY = "phone_models_full";
+
+let editId = null;
+let timeFilter = "all";
+
+const $ = id => document.getElementById(id);
+
+function syncModelToInput() {
+  $("newModel").value = $("model").value;
+}
+
+function downloadFile(content, filename, mimeType) {
+  const blob = new Blob([content], { type: mimeType });
+  const url = URL.createObjectURL(blob);
+  const a = document.createElement('a');
+  a.href = url;
+  a.download = filename;
+  document.body.appendChild(a);
+  document.body.removeChild(a);
+  URL.revokeObjectURL(url);
+}
+
+function getRecords() {
+  return JSON.parse(localStorage.getItem(RECORD_KEY) || "[]");
+}
+function setRecords(arr) {
+  localStorage.setItem(RECORD_KEY, JSON.stringify(arr));
+}
+function getModels() {
+  return JSON.parse(localStorage.getItem(MODEL_KEY) || "[]");
+}
+function setModels(arr) {
+  localStorage.setItem(MODEL_KEY, JSON.stringify([...new Set(arr)].filter(Boolean)));
+}
+
+function renderModelSelects() {
+  const models = getModels();
+  const modelSel = $("model");
+  modelSel.innerHTML = '<option value="">请选择型号</option>';
+  models.forEach(m => {
+    const opt = document.createElement("option");
+    opt.value = m;
+    opt.textContent = m;
+    modelSel.appendChild(opt);
+  });
+}
+
+function addNewModel() {
+  const val = $("newModel").value.trim();
+  if (!val) { alert("请输入型号"); return; }
+  const list = getModels();
+  if (!list.includes(val)) { list.push(val); setModels(list); }
+  renderModelSelects();
+}
+
+function deleteModel() {
+  const val = $("newModel").value.trim();
+  if (!val) { alert("请输入或选择要删除的型号"); return; }
+  if (!confirm("确定删除型号：" + val + "？")) return;
+  const list = getModels().filter(m => m !== val);
+  setModels(list);
+  renderModelSelects();
+  $("newModel").value = "";
+}
+
+function autoCalc() {
+  const cost = +$("costPrice").value || 0;
+  const sell = +$("sellPrice").value || 0;
+  const postage = +$("postage").value || 0;
+  const totalCost = cost + postage;
+  const profit = sell - totalCost;
+  let rate = 0;
+  if (totalCost > 0) rate = (profit / totalCost * 100).toFixed(1);
+  $("showCost").innerText = totalCost;
+  $("showSell").innerText = sell;
+  $("showProfit").innerText = profit;
+  $("showRate").innerText = rate + "%";
+}
+
+function openAddModal() {
+  editId = null;
+  $("model").value = "";
+  $("imei").value = "";
+  $("costTime").value = "";
+  $("costPrice").value = "";
+  $("sellPrice").value = "";
+  $("postage").value = "0";
+  $("channel").value = "";
+  autoCalc();
+  renderModelSelects();
+  $("addModal").style.display = "flex";
+}
+
+function closeModal() {
+  $("addModal").style.display = "none";
+}
+
+function saveRecord() {
+  const model = $("model").value || "";
+  const ram = $("ram").value || "";
+  const rom = $("rom").value || "";
+  const imei = $("imei").value || "";
+  const note = $("note").value || "";
+  const costTime = $("costTime").value || "";
+  const costPrice = +$("costPrice").value || 0;
+  const sellStatus = $("sellStatus").value || "0";
+  const channel = $("channel").value || "";
+  const sellPrice = +$("sellPrice").value || 0;
+  const postage = +$("postage").value || 0;
+  const totalCost = costPrice + postage;
+  const profit = sellPrice - totalCost;
+  const rate = totalCost > 0 ? (profit / totalCost * 100).toFixed(1) : "0";
+
+  const item = {
+    id: editId || Date.now(), model, ram, rom, imei, note,
+    costTime, costPrice, postage, totalCost,
+    sellStatus, channel, sellPrice, profit, rate
+  };
+
+  let list = getRecords();
+  if (editId) {
+    list = list.map(x => x.id == editId ? item : x);
+  } else {
+    list.unshift(item);
+  }
+  setRecords(list);
+  closeModal();
+  renderAll();
+}
+
+function editRecord(id) {
+  const d = getRecords().find(x => x.id == id);
+  if (!d) return;
+  editId = d.id;
+  $("model").value = d.model || "";
+  $("ram").value = d.ram || "";
+  $("rom").value = d.rom || "";
+  $("imei").value = d.imei || "";
+  $("note").value = d.note || "";
+  $("costTime").value = d.costTime || "";
+  $("costPrice").value = d.costPrice || "";
+  $("postage").value = d.postage || "";
+  $("sellStatus").value = d.sellStatus || "0";
+  $("channel").value = d.channel || "";
+  $("sellPrice").value = d.sellPrice || "";
+  autoCalc();
+  renderModelSelects();
+  $("addModal").style.display = "flex";
+}
+
+function delRecord(id) {
+  if (!confirm("确定删除该记录？")) return;
+  setRecords(getRecords().filter(x => x.id != id));
+  renderAll();
+}
+
+function switchTime(t) {
+  timeFilter = t;
+  document.querySelectorAll(".time-tab").forEach(tab => tab.classList.remove("active"));
+  event.target.classList.add("active");
+  renderAll();
+}
+
+function getFilteredList() {
+  const list = getRecords();
+  const now = new Date();
+  const currentYear = now.getFullYear().toString();
+  const lastYear = (now.getFullYear() - 1).toString();
+  const currentMonth = now.getFullYear() + "-" + String(now.getMonth() + 1).padStart(2, '0');
+  const lastMonthDate = new Date(now.getFullYear(), now.getMonth() - 1, 1);
+  const lastMonth = lastMonthDate.getFullYear() + "-" + String(lastMonthDate.getMonth() + 1).padStart(2, '0');
+
+  return list.filter(it => {
+    const ct = it.costTime;
+    if (!ct) return false;
+    switch (timeFilter) {
+      case 'lastMonth': return ct.startsWith(lastMonth);
+      case 'lastYear': return ct.startsWith(lastYear);
+      case 'month': return ct.startsWith(currentMonth);
+      case 'year': return ct.startsWith(currentYear);
+      case 'all':
+      default: return true;
+    }
+  });
+}
+
+function renderList() {
+  const list = getFilteredList();
+  if (!list.length) {
+    $("recordList").innerHTML = `<div class="empty-tip">暂无记录</div>`;
+    return;
+  }
+  $("recordList").innerHTML = list.map(it => {
+    const profitCls = it.profit > 0 ? "text-red" : it.profit < 0 ? "text-green" : "";
+    const statusTag = it.sellStatus == 1
+      ? `<span class="status-tag paid">已出货</span>`
+      : `<span class="status-tag unpaid">未出货</span>`;
+    return `
+    <div class="record-item">
+      <div class="record-head">
+        <div>${it.costTime || '-'}</div>
+        ${statusTag}
+      </div>
+      <div class="record-title">${it.model || '-'} | ${it.ram || '-'} | ${it.rom || '-'}</div>
+      <div>渠道：${it.channel || '无'}</div>
+      ${it.note ? `<div class="record-note">${it.note}</div>` : ''}
+      <div>IMEI：${it.imei || '无'}</div>
+      <div class="record-row">
+        <div>成本 ¥${it.totalCost}</div>
+        <div>收入 ¥${it.sellPrice}</div>
+      </div>
+      <div class="record-row">
+        <div>毛利：<span class="${profitCls}">¥${it.profit.toFixed(2)}</span></div>
+        <div>毛利率：<span class="${profitCls}">${it.rate}%</span></div>
+      </div>
+      <div class="record-actions">
+        <button class="record-action" onclick="editRecord(${it.id})">编辑</button>
+        <button class="record-action" onclick="delRecord(${it.id})">删除</button>
+      </div>
+    </div>`;
+  }).join("");
+}
+
+function renderSummary() {
+  const list = getFilteredList();
+  const count = list.length;
+  const totalCost = list.reduce((s,i)=>s+(+i.totalCost),0);
+  const totalIncome = list.reduce((s,i)=>s+(+i.sellPrice),0);
+  const totalProfit = list.reduce((s,i)=>s+(+i.profit),0);
+  let totalProfitRate = 0;
+  if (totalCost > 0) {
+    totalProfitRate = (totalProfit / totalCost * 100).toFixed(2);
+  }
+
+  const profitCls = totalProfit > 0 ? "text-red" : totalProfit < 0 ? "text-green" : "";
+  $("summaryCount").innerText = count;
+  $("summaryCost").innerText = totalCost.toFixed(2);
+  $("summaryIncome").innerText = totalIncome.toFixed(2);
+  $("summaryProfit").innerText = totalProfit.toFixed(2);
+  $("summaryProfitRate").innerText = totalProfitRate + "%";
+  
+  $("summaryProfit").className = "value " + profitCls;
+  $("summaryProfitRate").className = "value " + profitCls;
+}
+
+function updateSelectOptions(selectId, values, allText) {
+  const sel = $(selectId);
+  const oldVal = sel.value;
+  sel.innerHTML = '';
+  const optAll = document.createElement('option');
+  optAll.value = '';
+  optAll.textContent = allText;
+  sel.appendChild(optAll);
+  values.forEach(v => {
+    if (!v) return;
+    const opt = document.createElement('option');
+    opt.value = v;
+    opt.textContent = v;
+    sel.appendChild(opt);
+  });
+  sel.value = oldVal;
+}
+
+function renderTopFilters() {
+  const records = getRecords();
+  const models = Array.from(new Set(records.map(r => r.model).filter(Boolean)));
+  const rams = Array.from(new Set(records.map(r => r.ram).filter(Boolean)));
+  const roms = Array.from(new Set(records.map(r => r.rom).filter(Boolean)));
+  const channels = Array.from(new Set(records.map(r => r.channel).filter(Boolean)));
+  updateSelectOptions('filterModel', models, '全部型号');
+  updateSelectOptions('filterRam', rams, '全部运存');
+  updateSelectOptions('filterRom', roms, '全部存储');
+  updateSelectOptions('filterChannel', channels, '全部渠道');
+}
+
+function renderAll() {
+  renderTopFilters();
+  renderList();
+  renderSummary();
+}
+
+function exportCSV() {
+  const list = getFilteredList();
+  if (!list.length) return alert("暂无数据可导出");
+  const rows = [["型号","运存","存储","IMEI","备注","日期","成本","状态","渠道","售价","邮费","毛利","毛利率"]];
+  list.forEach(i => {
+    rows.push([
+      i.model || "", i.ram || "", i.rom || "", i.imei || "", i.note || "",
+      i.costTime || "", i.totalCost || 0, i.sellStatus == "1" ? "已出货" : "未出货",
+      i.channel || "", i.sellPrice || 0, i.postage || 0, i.profit || 0, i.rate || "0"
+    ]);
+  });
+  const csv = rows.map(e => e.join(",")).join("\n");
+  downloadFile(csv, "手机台账.csv", "text/csv;charset=utf-8");
+  alert("导出成功！");
+}
+
+function exportBackup() {
+  const data = { records: getRecords(), models: getModels() };
+  const json = JSON.stringify(data, null, 2);
+  downloadFile(json, "手机台账备份.json", "application/json");
+  alert("备份成功！");
+}
+
+function importBackup() {
+  $("fileInput").onchange = function(e) {
+    const file = e.target.files[0];
+    if (!file) return;
+    const reader = new FileReader();
+    reader.onload = function(ev) {
+      try {
+        const data = JSON.parse(ev.target.result);
+        if (data.records) setRecords(data.records);
+        if (data.models) setModels(data.models);
+        alert("导入成功！");
+        renderAll();
+      } catch (err) {
+        alert("导入失败：文件格式错误");
+      }
+    };
+    reader.readAsText(file);
+  };
+  $("fileInput").click();
+}
+
+window.onload = () => { renderAll(); };
+</script>
+</body>
 </html>
